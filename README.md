@@ -1,8 +1,15 @@
-# React + Vite
+# CMSC 127 Project: Food Review System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Description
 
-Currently, two official plugins are available:
+This information system will allow us to record, in electronic form, data on food reviews and food items from food establishments. The application is a web application built using the MERN tech stack (i.e., MariaDB, ExpressJS, ReactJS, and NodeJS).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Developers
+
+- John Angelo Alviar
+- Kyro Kristoffer Ramos
+- John Russel Ilagan
+
+### Section
+
+S-5L
