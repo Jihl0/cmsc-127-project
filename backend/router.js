@@ -20,7 +20,9 @@ searchEstablishmentReviews } from './controllers/establishment_controller.js';
         updateFoodItem,
         deleteFoodItem, 
         searchFoodItems,
-        searchFoodReviews
+        searchFoodReviews,
+        Price
+
 
     } from './controllers/food_item.js';
 
@@ -40,6 +42,7 @@ const router = (app) => {
     app.get('/food-items-by-type/:foodType', getFoodItemsByType);
     app.get('/monthly-food-reviews', getMonthlyFoodReviews);
     app.get('/food-items-sorted/:order', getFoodItemsSortedByPrice);
+    app.get('/food-item/price/:priceRange', Price);
     app.post('/add-establishment', addEstablishment);
     app.put('/update-establishment/:establishmentId', updateEstablishment);
     app.delete('/delete-establishment/:establishmentId', deleteEstablishment);

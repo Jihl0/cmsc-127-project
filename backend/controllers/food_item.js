@@ -218,14 +218,50 @@ async function deleteFoodItem(req, res) {
 
 async function searchFoodItems(req, res) {
     const { keyword } = req.params;
+    const { foodType, priceRange } = req.query; // Extract the foodType and priceRange query parameters
     try {
         const conn = await pool.getConnection();
-        const rows = await conn.query(`
-        SELECT fi.FoodItemID, fi.Name, fi.Price, fi.AverageRating, fe.Name AS EstablishmentName
-        FROM FOOD_ITEM fi
-        JOIN FOOD_ESTABLISHMENT fe ON fi.EstablishmentID = fe.EstablishmentID
-        WHERE fi.Name LIKE ?
-    `, [`%${keyword}%`]);
+        let query = `
+            SELECT fi.FoodItemID, fi.Name, fi.Price, fi.AverageRating, fe.Name AS EstablishmentName
+            FROM FOOD_ITEM fi
+            JOIN FOOD_ESTABLISHMENT fe ON fi.EstablishmentID = fe.EstablishmentID
+            JOIN FOOD_ITEM_FOOD_TYPE fift ON fi.FoodItemID = fift.FoodItemID
+            WHERE fi.Name LIKE ?`;
+
+        const queryParams = [`%${keyword}%`];
+
+        // If foodType is provided, add it to the query and parameters
+        if (foodType) {
+            query += ' AND fift.FoodType = ?'; // Adjust column name if necessary
+            queryParams.push(foodType);
+        }
+
+        // If priceRange is provided, add it to the query and parameters
+        if (priceRange) {
+            let minPrice, maxPrice;
+            switch (priceRange) {
+                case 'High':
+                    minPrice = 200;
+                    maxPrice = Number.MAX_SAFE_INTEGER;
+                    break;
+                case 'Medium':
+                    minPrice = 100;
+                    maxPrice = 199;
+                    break;
+                case 'Low':
+                    minPrice = 1;
+                    maxPrice = 99;
+                    break;
+                default:
+                    minPrice = 0;
+                    maxPrice = Number.MAX_SAFE_INTEGER;
+                    break;
+            }
+            query += ' AND fi.Price BETWEEN ? AND ?';
+            queryParams.push(minPrice, maxPrice);
+        }
+
+        const rows = await conn.query(query, queryParams);
         res.status(200).json(rows);
         conn.end();
     } catch (err) {
@@ -233,6 +269,8 @@ async function searchFoodItems(req, res) {
         res.status(500).send('Internal server error');
     }
 }
+
+
 
 async function searchFoodReviews(req, res) {
     const { keyword } = req.params;
@@ -253,4 +291,43 @@ async function searchFoodReviews(req, res) {
     }
 }
 
-export { getAllFoodItems, getFoodReviews, getFoodItemsByEstablishment, getFoodTypes, getFoodItemsByType, getMonthlyFoodReviews, getFoodItemsSortedByPrice, addFoodItem, updateFoodItem, deleteFoodItem, searchFoodItems, searchFoodReviews };
+async function Price (req, res) {
+    const { priceRange } = req.params;
+    let minPrice, maxPrice;
+
+    // Set minPrice and maxPrice based on the price range
+    switch (priceRange.toLowerCase()) {
+        case 'high':
+            minPrice = 200;
+            maxPrice = 99999999;
+            break;
+        case 'medium':
+            minPrice = 100;
+            maxPrice = 199;
+            break;
+        case 'low':
+            minPrice = 1;
+            maxPrice = 99;
+            break;
+        default:
+            // Handle invalid price range
+            return res.status(400).json({ error: 'Invalid price range' });
+    }
+
+    try {
+        const conn = await pool.getConnection();
+        const rows = await conn.query(`
+        SELECT fi.FoodItemID, fe.Name as EstablishmentName, fi.Name as FoodItemName, fi.Price, fi.AverageRating
+        FROM FOOD_ITEM fi
+        JOIN FOOD_ESTABLISHMENT fe ON fi.EstablishmentID = fe.EstablishmentID
+            WHERE Price >= ? AND Price <= ?
+        `, [minPrice, maxPrice]);
+        res.status(200).json(rows);
+        conn.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+};
+
+export { getAllFoodItems, getFoodReviews, getFoodItemsByEstablishment, getFoodTypes, getFoodItemsByType, getMonthlyFoodReviews, getFoodItemsSortedByPrice, addFoodItem, updateFoodItem, deleteFoodItem, searchFoodItems, searchFoodReviews, Price };
