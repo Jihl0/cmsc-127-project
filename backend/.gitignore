@@ -1,2 +1,4 @@
 node_modules/*
-controllers/*
+controllers/establishment_controller.js
+controllers/food_item.js
+controllers/user_controller.js

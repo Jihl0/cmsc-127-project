@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function SearchTab() {
+import '../../style/components/searchtab.css';
+
+export default function SearchTab() {
   const [establishmentResults, setEstablishmentResults] = useState([]);
   const [foodItemResults, setFoodItemResults] = useState([]);
   const [estabReviewResults, setEstabReviewResults] = useState([]);
@@ -44,9 +46,11 @@ function SearchTab() {
 
   const handleEstablishmentSearch = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/search-establishments/${establishmentKeyword}`
-      );
+      let url = `http://localhost:5000/search-food-items/${foodItemKeyword}`;
+      if (selectedFoodType) {
+        url += `?foodType=${selectedFoodType}`;
+      }
+      const response = await axios.get(url);
       setEstablishmentResults(response.data);
     } catch (error) {
       console.error('Error searching establishments:', error);
@@ -55,11 +59,9 @@ function SearchTab() {
 
   const handleFoodItemSearch = async () => {
     try {
-      let url = `http://localhost:5000/search-food-items/${foodItemKeyword}`;
-      if (selectedFoodType) {
-        url += `?foodType=${selectedFoodType}`;
-      }
-      const response = await axios.get(url);
+      const response = await axios.get(
+        `http://localhost:5000/search-food-items/${foodItemKeyword}`
+      );
       setFoodItemResults(response.data);
     } catch (error) {
       console.error('Error searching food items:', error);
@@ -89,103 +91,144 @@ function SearchTab() {
   };
 
   return (
-    <div>
-      <div>
-        <input
-          type="text"
-          value={establishmentKeyword}
-          onChange={(e) => setEstablishmentKeyword(e.target.value)}
-          placeholder="Search Establishments"
-        />
-        <button onClick={handleEstablishmentSearch}>
-          Search Establishments
-        </button>
+    <div className="search-container">
+      <div className="double-column column-1">
+        <div className="same-line">
+          <input
+            type="text"
+            value={establishmentKeyword}
+            onChange={(e) => setEstablishmentKeyword(e.target.value)}
+            placeholder="Search Establishments"
+          />
+          <button onClick={handleEstablishmentSearch}>Search</button>
+        </div>
+        <div className="same-line">
+          <input
+            type="text"
+            value={foodItemKeyword}
+            onChange={(e) => setFoodItemKeyword(e.target.value)}
+            placeholder="Search Food Items"
+          />
+          <select value={selectedFoodType} onChange={handleFoodTypeChange}>
+            <option value="">All Food Types</option>
+            {foodTypes.map((foodType) => (
+              <option key={foodType.id} value={foodType.id}>
+                {foodType.FoodType}
+              </option>
+            ))}
+          </select>
+          <button onClick={handleFoodItemSearch}>Search</button>
+        </div>
+        <div className="same-line">
+          <input
+            type="text"
+            value={estabReviewKeyword}
+            onChange={(e) => setEstabReviewKeyword(e.target.value)}
+            placeholder="Search Establishment Reviews"
+          />
+          <button onClick={handleEstabReviewSearch}>Search</button>
+        </div>
+        <div className="same-line">
+          <input
+            type="text"
+            value={foodReviewKeyword}
+            onChange={(e) => setFoodReviewKeyword(e.target.value)}
+            placeholder="Search Food Reviews"
+          />
+          <button onClick={handleFoodReviewSearch}>Search</button>
+        </div>
       </div>
-      <div>
-        <input
-          type="text"
-          value={foodItemKeyword}
-          onChange={(e) => setFoodItemKeyword(e.target.value)}
-          placeholder="Search Food Items"
-        />
-        <select value={selectedFoodType} onChange={handleFoodTypeChange}>
-          <option value="">All Food Types</option>
-          {foodTypes.map((foodType) => (
-            <option key={foodType.id} value={foodType.id}>
-              {foodType.FoodType}
-            </option>
-          ))}
-        </select>
-        <button onClick={handleFoodItemSearch}>Search Food Items</button>
-      </div>
-      <div>
-        <input
-          type="text"
-          value={foodReviewKeyword}
-          onChange={(e) => setFoodReviewKeyword(e.target.value)}
-          placeholder="Search Food Reviews"
-        />
-        <button onClick={handleFoodReviewSearch}>Search Food Reviews</button>
-      </div>
-      <div>
+      <div className="double-column column-2">
         <h2>Establishment Results</h2>
-        <ul>
-          {establishmentResults.map((establishment) => (
-            <li key={establishment.EstablishmentID}>
-              <p>Name: {establishment.Name}</p>
-              <p>Address: {establishment.Address}</p>
-              <p>Rating: {establishment.AverageRating}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <h2>Food Item Results</h2>
-        <ul>
-          {foodItemResults.map((foodItem) => (
-            <li key={foodItem.FoodItemID}>
-              <p>Name: {foodItem.Name}</p>
-              <p>Price: {foodItem.Price}</p>
-              <p>Establishment: {foodItem.EstablishmentName}</p>
-              <p>Average Rating: {foodItem.AverageRating}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <button onClick={() => handlePriceFilter('high')}>High Price</button>
-        <button onClick={() => handlePriceFilter('medium')}>
-          Medium Price
-        </button>
-        <button onClick={() => handlePriceFilter('low')}>Low Price</button>
-      </div>
-      <div>
+        {establishmentResults.map((establishment) => (
+          <li key={establishment.EstablishmentID} className="search-card">
+            <p>
+              Name: <span className="search-result">{establishment.Name}</span>
+            </p>
+            <p>
+              Address:{' '}
+              <span className="search-result">{establishment.Address}</span>
+            </p>
+            <p>
+              Rating:{' '}
+              <span className="search-result">
+                {establishment.AverageRating}
+              </span>
+            </p>
+          </li>
+        ))}
+        <div className="same-line">
+          <h2>Food Item Results</h2>
+          <button onClick={() => handlePriceFilter('high')}>High Price</button>
+          <button onClick={() => handlePriceFilter('medium')}>
+            Medium Price
+          </button>
+          <button onClick={() => handlePriceFilter('low')}>Low Price</button>
+        </div>
+        {foodItemResults.map((foodItem) => (
+          <li key={foodItem.FoodItemID} className="search-card">
+            <p>
+              Name: <span className="search-result">{foodItem.Name}</span>
+            </p>
+            <p>
+              Price: <span className="search-result">{foodItem.Price}</span>
+            </p>
+            <p>
+              Establishment:{' '}
+              <span className="search-result">
+                {foodItem.EstablishmentName}
+              </span>
+            </p>
+            <p>
+              Average Rating:{' '}
+              <span className="search-result">{foodItem.AverageRating}</span>
+            </p>
+          </li>
+        ))}
         <h2>Establishment Review Results</h2>
-        <ul>
-          {estabReviewResults.map((review) => (
-            <li key={review.ReviewID}>
-              <p>Establishment: {review.EstablishmentName}</p>
-              <p>Reviewer: {review.Username}</p>
-              <p>Rating: {review.Rating}</p>
-              <p>Date: {review.Date}</p>
-              <p>Comment: {review.Review_Content}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
+        {estabReviewResults.map((review) => (
+          <li key={review.ReviewID} className="search-card">
+            <p>
+              Establishment:{' '}
+              <span className="search-result">{review.EstablishmentName}</span>
+            </p>
+            <p>
+              Reviewer: <span className="search-result">{review.Username}</span>
+            </p>
+            <p>
+              Rating: <span className="search-result">{review.Rating}</span>
+            </p>
+            <p>
+              Date: <span className="search-result">{review.Date}</span>
+            </p>
+            <p>
+              Comment:{' '}
+              <span className="search-result">{review.Review_Content}</span>
+            </p>
+          </li>
+        ))}
         <h2>Food Review Results</h2>
-        <ul>
-          {foodReviewResults.map((review) => (
-            <li key={review.ReviewID}>
-              <p>Food Item: {review.FoodItemName}</p>
-              <p>Reviewer: {review.Username}</p>
-              <p>Rating: {review.Rating}</p>
-              <p>Date: {review.Date}</p>
-              <p>Comment: {review.Review_Content}</p>
-            </li>
-          ))}
-        </ul>
+        {foodReviewResults.map((review) => (
+          <li key={review.ReviewID} className="search-card">
+            <p>
+              Food Item:{' '}
+              <span className="search-result">{review.FoodItemName}</span>
+            </p>
+            <p>
+              Reviewer: <span className="search-result">{review.Username}</span>
+            </p>
+            <p>
+              Rating: <span className="search-result">{review.Rating}</span>
+            </p>
+            <p>
+              Date: <span className="search-result">{review.Date}</span>
+            </p>
+            <p>
+              Comment:{' '}
+              <span className="search-result">{review.Review_Content}</span>
+            </p>
+          </li>
+        ))}
       </div>
     </div>
   );

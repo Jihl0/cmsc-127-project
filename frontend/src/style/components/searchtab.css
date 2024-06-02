@@ -49,3 +49,7 @@
   color: var(--secondary-color);
   font-weight: bold;
 }
+
+.column-2 .same-line h2 {
+  margin-right: 3vh;
+}
