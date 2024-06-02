@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function SearchTab() {
@@ -10,6 +10,26 @@ function SearchTab() {
     const [foodItemKeyword, setFoodItemKeyword] = useState('');
     const [estabReviewKeyword, setEstabReviewKeyword] = useState('');
     const [foodReviewKeyword, setFoodReviewKeyword] = useState('');
+    const [foodTypes, setFoodTypes] = useState([]);
+    const [selectedFoodType, setSelectedFoodType] = useState('');
+
+    useEffect(() => {
+        fetchFoodTypes();
+    }, []);
+
+    const fetchFoodTypes = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/type');
+            setFoodTypes(response.data);
+        } catch (error) {
+            console.error('Error fetching food types:', error);
+        }
+    };
+
+    const handleFoodTypeChange = (event) => {
+        setSelectedFoodType(event.target.value);
+    };
+
 
     const handleEstablishmentSearch = async () => {
         try {
@@ -22,7 +42,11 @@ function SearchTab() {
 
     const handleFoodItemSearch = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/search-food-items/${foodItemKeyword}`);
+            let url = `http://localhost:5000/search-food-items/${foodItemKeyword}`;
+            if (selectedFoodType) {
+                url += `?foodType=${selectedFoodType}`;
+            }
+            const response = await axios.get(url);
             setFoodItemResults(response.data);
         } catch (error) {
             console.error('Error searching food items:', error);
@@ -65,16 +89,15 @@ function SearchTab() {
                     onChange={(e) => setFoodItemKeyword(e.target.value)}
                     placeholder="Search Food Items"
                 />
+                <select value={selectedFoodType} onChange={handleFoodTypeChange}>
+                    <option value="">All Food Types</option>
+                    {foodTypes.map((foodType) => (
+                        <option key={foodType.id} value={foodType.id}>
+                            {foodType.FoodType}
+                        </option>
+                    ))}
+                </select>
                 <button onClick={handleFoodItemSearch}>Search Food Items</button>
-            </div>
-            <div>
-                <input
-                    type="text"
-                    value={estabReviewKeyword}
-                    onChange={(e) => setEstabReviewKeyword(e.target.value)}
-                    placeholder="Search Establishment Reviews"
-                />
-                <button onClick={handleEstabReviewSearch}>Search Establishment Reviews</button>
             </div>
             <div>
                 <input

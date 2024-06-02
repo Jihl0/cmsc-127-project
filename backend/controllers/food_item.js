@@ -218,14 +218,25 @@ async function deleteFoodItem(req, res) {
 
 async function searchFoodItems(req, res) {
     const { keyword } = req.params;
+    const { foodType } = req.query; // Extract the foodType query parameter
     try {
         const conn = await pool.getConnection();
-        const rows = await conn.query(`
-        SELECT fi.FoodItemID, fi.Name, fi.Price, fi.AverageRating, fe.Name AS EstablishmentName
-        FROM FOOD_ITEM fi
-        JOIN FOOD_ESTABLISHMENT fe ON fi.EstablishmentID = fe.EstablishmentID
-        WHERE fi.Name LIKE ?
-    `, [`%${keyword}%`]);
+        let query = `
+            SELECT fi.FoodItemID, fi.Name, fi.Price, fi.AverageRating, fe.Name AS EstablishmentName
+            FROM FOOD_ITEM fi
+            JOIN FOOD_ESTABLISHMENT fe ON fi.EstablishmentID = fe.EstablishmentID
+            JOIN FOOD_ITEM_FOOD_TYPE fift ON fi.FoodItemID = fift.FoodItemID
+            WHERE fi.Name LIKE ?`;
+
+        const queryParams = [`%${keyword}%`];
+
+        // If foodType is provided, add it to the query and parameters
+        if (foodType) {
+            query += ' AND fift.FoodType = ?'; // Adjust column name if necessary
+            queryParams.push(foodType);
+        }
+
+        const rows = await conn.query(query, queryParams);
         res.status(200).json(rows);
         conn.end();
     } catch (err) {
@@ -233,6 +244,7 @@ async function searchFoodItems(req, res) {
         res.status(500).send('Internal server error');
     }
 }
+
 
 async function searchFoodReviews(req, res) {
     const { keyword } = req.params;
