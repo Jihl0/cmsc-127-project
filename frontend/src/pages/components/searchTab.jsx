@@ -12,6 +12,7 @@ function SearchTab() {
     const [foodReviewKeyword, setFoodReviewKeyword] = useState('');
     const [foodTypes, setFoodTypes] = useState([]);
     const [selectedFoodType, setSelectedFoodType] = useState('');
+    const [priceFilter, setPriceFilter] = useState('');
 
     useEffect(() => {
         fetchFoodTypes();
@@ -28,6 +29,15 @@ function SearchTab() {
 
     const handleFoodTypeChange = (event) => {
         setSelectedFoodType(event.target.value);
+    };
+
+    const handlePriceFilter = async (priceRange) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/food-item/price/${priceRange}`);
+            setFoodItemResults(response.data);
+        } catch (error) {
+            console.error('Error fetching food items by price range:', error);
+        }
     };
 
 
@@ -133,6 +143,11 @@ function SearchTab() {
                     ))}
                 </ul>
             </div>
+            <div>
+            <button onClick={() => handlePriceFilter('high')}>High Price</button>
+            <button onClick={() => handlePriceFilter('medium')}>Medium Price</button>
+            <button onClick={() => handlePriceFilter('low')}>Low Price</button>
+        </div>
             <div>
                 <h2>Establishment Review Results</h2>
                 <ul>

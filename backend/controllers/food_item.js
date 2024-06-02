@@ -218,7 +218,7 @@ async function deleteFoodItem(req, res) {
 
 async function searchFoodItems(req, res) {
     const { keyword } = req.params;
-    const { foodType } = req.query; // Extract the foodType query parameter
+    const { foodType, priceRange } = req.query; // Extract the foodType and priceRange query parameters
     try {
         const conn = await pool.getConnection();
         let query = `
@@ -236,6 +236,31 @@ async function searchFoodItems(req, res) {
             queryParams.push(foodType);
         }
 
+        // If priceRange is provided, add it to the query and parameters
+        if (priceRange) {
+            let minPrice, maxPrice;
+            switch (priceRange) {
+                case 'High':
+                    minPrice = 200;
+                    maxPrice = Number.MAX_SAFE_INTEGER;
+                    break;
+                case 'Medium':
+                    minPrice = 100;
+                    maxPrice = 199;
+                    break;
+                case 'Low':
+                    minPrice = 1;
+                    maxPrice = 99;
+                    break;
+                default:
+                    minPrice = 0;
+                    maxPrice = Number.MAX_SAFE_INTEGER;
+                    break;
+            }
+            query += ' AND fi.Price BETWEEN ? AND ?';
+            queryParams.push(minPrice, maxPrice);
+        }
+
         const rows = await conn.query(query, queryParams);
         res.status(200).json(rows);
         conn.end();
@@ -244,6 +269,7 @@ async function searchFoodItems(req, res) {
         res.status(500).send('Internal server error');
     }
 }
+
 
 
 async function searchFoodReviews(req, res) {
@@ -265,4 +291,43 @@ async function searchFoodReviews(req, res) {
     }
 }
 
-export { getAllFoodItems, getFoodReviews, getFoodItemsByEstablishment, getFoodTypes, getFoodItemsByType, getMonthlyFoodReviews, getFoodItemsSortedByPrice, addFoodItem, updateFoodItem, deleteFoodItem, searchFoodItems, searchFoodReviews };
+async function Price (req, res) {
+    const { priceRange } = req.params;
+    let minPrice, maxPrice;
+
+    // Set minPrice and maxPrice based on the price range
+    switch (priceRange.toLowerCase()) {
+        case 'high':
+            minPrice = 200;
+            maxPrice = 99999999;
+            break;
+        case 'medium':
+            minPrice = 100;
+            maxPrice = 199;
+            break;
+        case 'low':
+            minPrice = 1;
+            maxPrice = 99;
+            break;
+        default:
+            // Handle invalid price range
+            return res.status(400).json({ error: 'Invalid price range' });
+    }
+
+    try {
+        const conn = await pool.getConnection();
+        const rows = await conn.query(`
+        SELECT fi.FoodItemID, fe.Name as EstablishmentName, fi.Name as FoodItemName, fi.Price, fi.AverageRating
+        FROM FOOD_ITEM fi
+        JOIN FOOD_ESTABLISHMENT fe ON fi.EstablishmentID = fe.EstablishmentID
+            WHERE Price >= ? AND Price <= ?
+        `, [minPrice, maxPrice]);
+        res.status(200).json(rows);
+        conn.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+};
+
+export { getAllFoodItems, getFoodReviews, getFoodItemsByEstablishment, getFoodTypes, getFoodItemsByType, getMonthlyFoodReviews, getFoodItemsSortedByPrice, addFoodItem, updateFoodItem, deleteFoodItem, searchFoodItems, searchFoodReviews, Price };
