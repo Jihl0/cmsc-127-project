@@ -1,27 +1,32 @@
-.App {
-    text-align: center;
-  }
-  
-  .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  }
-  
-  button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #61dafb;
-    color: #282c34;
-  }
-  
+div.root-container {
+  flex-direction: row;
+  gap: 0;
+}
+
+div.root-container img {
+  height: 100vh;
+  width: 30vw;
+  object-fit: cover;
+  box-shadow: 0vh 0vh 10vh 3vh rgba(0, 0, 0, 0.3);
+}
+
+div.root-column {
+  width: 70vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+div.root-column h1 {
+  margin: 0;
+}
+
+div.root-column p {
+  margin: 0;
+  width: 40vw;
+  text-align: center;
+}
+
+div.root-column .same-line {
+  gap: 1vh;
+}

@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap'); /* title font */
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin&display=swap'); /* body font */
+
+:root {
+  --main-color: #8d1836;
+  --secondary-color: #26553f;
+  --text-color: #1a1a1d;
+  --sub-text-color: #acb2bc;
+  --invert-text-color: #f1f1f1;
+  --background-color: #f3f4f6;
+  --container-color: #ffffff;
+}
+
+::-webkit-scrollbar {
+  width: 1vh;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--main-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
+}
+
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  font-size: 2vh;
+  font-family: 'Libre Franklin', sans-serif;
+}
+
+div {
+  margin: 0;
+  padding: 0;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+}
+
+div.same-line {
+  display: flex;
+  flex-direction: row;
+  gap: 1vh;
+  align-items: center;
+}
+
+div.align-end {
+  justify-content: flex-end;
+}
+
+li {
+  list-style-type: none;
+}
+
+li a {
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+input {
+  outline: none;
+  text-decoration: none;
+  border: none;
+  padding: 1.5vh;
+  color: var(--sub-text-color);
+  box-shadow: 0vh 0vh 2vh -1vh rgba(0, 0, 0, 0.2);
+}
+
+button {
+  margin: 0;
+  padding: 1.5vh 2vh;
+  height: fit-content;
+  width: fit-content;
+  cursor: pointer;
+  border: none;
+  color: var(--invert-text-color);
+  background-color: var(--main-color);
+  border-radius: 1vh;
+  font-size: 2vh;
+  transition: ease-in 0.025s;
+}
+
+button:hover {
+  background-color: var(--main-color);
+  color: var(--invert-text-color);
+  transform: scale(1.05);
+}
+
+select {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: 0.3vh solid var(--sub-text-color);
+  padding: 1.5vh 2vh;
+  border-radius: 0.5vh;
+  transition: ease-in 0.025s;
+}
+
+select:focus {
+  outline: none;
+}

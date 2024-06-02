@@ -1,0 +1,37 @@
+div.signin-container {
+  flex-direction: row;
+  gap: 0;
+}
+
+div.signin-container img {
+  height: 100vh;
+  width: 30vw;
+  object-fit: cover;
+  box-shadow: 0vh 0vh 10vh 3vh rgba(0, 0, 0, 0.3);
+}
+
+div.login-container {
+  height: 100vh;
+  width: 70vw;
+  justify-content: center;
+  align-items: center;
+}
+
+div.login-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  align-items: center;
+}
+
+div.login-container form h1 {
+  margin: 0;
+}
+
+div.login-container form input {
+  width: 20vw;
+}
+
+div.login-container form button {
+  width: 20vw;
+}

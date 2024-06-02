@@ -1,0 +1,69 @@
+.viewtab-container {
+  /* background-color: rgba(10, 50, 180, 0.5); */
+  padding: 0vh 5vh;
+  display: flex;
+}
+
+.viewtab-container h2 {
+  font-size: 3vh;
+  margin: 2vh 0vh;
+}
+
+td {
+  display: table-cell;
+  justify-content: center;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 1vh;
+  padding: 1vh;
+}
+
+th {
+  background-color: var(--secondary-color);
+  border-radius: 1vh;
+  padding: 1vh;
+  color: var(--invert-text-color);
+  font-weight: normal;
+}
+
+div.floating-container {
+  gap: 3vh;
+}
+
+div.food-items {
+  display: flex;
+  flex-direction: column;
+}
+
+div.food-items-container {
+  display: flex;
+  flex-direction: row;
+}
+
+div.food-items table {
+  width: 80vw;
+}
+
+div.food-items .establishment-buttons {
+  width: 20vw;
+  flex-wrap: wrap;
+}
+
+div.food-types .same-line {
+  align-items: flex-start;
+}
+
+div.food-type-buttons {
+  width: 20vw;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  height: fit-content;
+}
+
+div.food-type-container {
+  width: 80vw;
+}
+
+h2.food-type-label {
+  margin: 0;
+}
