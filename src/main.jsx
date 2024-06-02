@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import Root from './pages/Root';
+import Login from './pages/Signin';
+import Register from './pages/Signup';
 
 const router = createBrowserRouter([
   { path: '/', element: <Root /> },
