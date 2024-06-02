@@ -5,7 +5,9 @@ import {     getAllEstablishments,
     getHighRatedEstablishments,
     addEstablishment,
     updateEstablishment,
-    deleteEstablishment } from './controllers/establishment_controller.js';
+    deleteEstablishment,
+searchEstablishments,
+searchEstablishmentReviews } from './controllers/establishment_controller.js';
     import {
         getAllFoodItems,
         getFoodReviews,
@@ -16,7 +18,10 @@ import {     getAllEstablishments,
         getFoodItemsSortedByPrice,
         addFoodItem,
         updateFoodItem,
-        deleteFoodItem
+        deleteFoodItem, 
+        searchFoodItems,
+        searchFoodReviews
+
     } from './controllers/food_item.js';
 
 const router = (app) => {
@@ -41,6 +46,10 @@ const router = (app) => {
     app.post('/add-food-item', addFoodItem);
     app.put('/update-food-item/:foodItemId', updateFoodItem);
     app.delete('/delete-food-item/:foodItemId', deleteFoodItem);
+    app.get('/search-establishments/:keyword', searchEstablishments);
+    app.get('/search-food-items/:keyword', searchFoodItems);
+    app.get('/search-establishment-reviews/:keyword', searchEstablishmentReviews); 
+    app.get('/search-food-reviews/:keyword', searchFoodReviews);
     }
 
 export default router;

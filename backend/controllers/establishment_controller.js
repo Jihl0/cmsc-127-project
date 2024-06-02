@@ -199,4 +199,40 @@ async function deleteEstablishment(req, res) {
     }
 }
 
-export { getAllEstablishments, getEstablishmentReviews, getMonthlyEstablishmentReviews, getHighRatedEstablishments, addEstablishment, updateEstablishment, deleteEstablishment };
+async function searchEstablishments(req, res) {
+    const { keyword } = req.params;
+    try {
+        const conn = await pool.getConnection();
+        const rows = await conn.query(`
+        SELECT e.EstablishmentID, e.Name, a.Address, e.AverageRating
+        FROM FOOD_ESTABLISHMENT e JOIN FOOD_ESTABLISHMENT_ADDRESS a on e.EstablishmentID=a.EstablishmentID
+        WHERE e.Name LIKE ? 
+        `, [`%${keyword}%`]);
+        res.status(200).json(rows);
+        conn.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+}
+
+async function searchEstablishmentReviews(req, res) {
+    const { keyword } = req.params;
+    try {
+        const conn = await pool.getConnection();
+        const rows = await conn.query(`
+        SELECT er.ReviewID, u.Username, fe.Name AS EstablishmentName, er.Rating, er.Date, er.Review_Content
+        FROM review_estab er
+        JOIN USER u ON er.UserID=u.UserID
+        JOIN FOOD_ESTABLISHMENT fe ON er.EstablishmentID = fe.EstablishmentID
+        WHERE fe.Name LIKE ?
+        `, [`%${keyword}%`]);
+        res.status(200).json(rows);
+        conn.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+}
+
+export { getAllEstablishments, getEstablishmentReviews, getMonthlyEstablishmentReviews, getHighRatedEstablishments, addEstablishment, updateEstablishment, deleteEstablishment, searchEstablishments, searchEstablishmentReviews };

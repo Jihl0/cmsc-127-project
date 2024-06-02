@@ -216,4 +216,41 @@ async function deleteFoodItem(req, res) {
     }
 }
 
-export { getAllFoodItems, getFoodReviews, getFoodItemsByEstablishment, getFoodTypes, getFoodItemsByType, getMonthlyFoodReviews, getFoodItemsSortedByPrice, addFoodItem, updateFoodItem, deleteFoodItem };
+async function searchFoodItems(req, res) {
+    const { keyword } = req.params;
+    try {
+        const conn = await pool.getConnection();
+        const rows = await conn.query(`
+        SELECT fi.FoodItemID, fi.Name, fi.Price, fi.AverageRating, fe.Name AS EstablishmentName
+        FROM FOOD_ITEM fi
+        JOIN FOOD_ESTABLISHMENT fe ON fi.EstablishmentID = fe.EstablishmentID
+        WHERE fi.Name LIKE ?
+    `, [`%${keyword}%`]);
+        res.status(200).json(rows);
+        conn.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+}
+
+async function searchFoodReviews(req, res) {
+    const { keyword } = req.params;
+    try {
+        const conn = await pool.getConnection();
+        const rows = await conn.query(`
+        SELECT rf.ReviewID, u.Username, fi.Name AS FoodItemName, rf.Rating, rf.Date, rf.Review_Content
+        FROM REVIEW_FOOD rf
+        JOIN USER u ON rf.UserID = u.UserID
+        JOIN FOOD_ITEM fi ON rf.FoodItemID = fi.FoodItemID
+        WHERE fi.Name LIKE ?
+    `, [`%${keyword}%`]);
+        res.status(200).json(rows);
+        conn.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+}
+
+export { getAllFoodItems, getFoodReviews, getFoodItemsByEstablishment, getFoodTypes, getFoodItemsByType, getMonthlyFoodReviews, getFoodItemsSortedByPrice, addFoodItem, updateFoodItem, deleteFoodItem, searchFoodItems, searchFoodReviews };
