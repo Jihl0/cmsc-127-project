@@ -46,7 +46,7 @@ export default function SearchTab() {
 
   const handleEstablishmentSearch = async () => {
     try {
-      let url = `http://localhost:5000/search-food-items/${foodItemKeyword}`;
+      let url = `http://localhost:5000/search-establishments/${establishmentKeyword}`;
       if (selectedFoodType) {
         url += `?foodType=${selectedFoodType}`;
       }
@@ -212,7 +212,7 @@ export default function SearchTab() {
           <li key={review.ReviewID} className="search-card">
             <p>
               Food Item:{' '}
-              <span className="search-result">{review.FoodItemName}</span>
+              <span className="search-result">{review.Name}</span>
             </p>
             <p>
               Reviewer: <span className="search-result">{review.Username}</span>
