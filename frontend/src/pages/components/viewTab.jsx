@@ -140,35 +140,35 @@ export default function ViewTab() {
   return (
     <div className="viewtab-container">
       <div className="floating-container">
-      <div className="food-establishments">
-        <h2>Food Establishments</h2>
-        {establishments.length > 0 ? (
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Average Rating</th>
-                <th>Address</th>
-              </tr>
-            </thead>
-            <tbody>
-              {establishments.map((establishment) => (
-                <tr key={establishment.EstablishmentID}>
-                  <td>{establishment.Name}</td>
-                  <td>{establishment.AverageRating}</td>
-                  <td>{establishment.Address}</td>
+        <div className="food-establishments">
+          <h2>Food Establishments</h2>
+          {establishments.length > 0 ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Average Rating</th>
+                  <th>Address</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>No establishments available</p>
-        )}
-      </div>
+              </thead>
+              <tbody>
+                {establishments.map((establishment) => (
+                  <tr key={establishment.EstablishmentID}>
+                    <td>{establishment.Name}</td>
+                    <td>{establishment.AverageRating}</td>
+                    <td>{establishment.Address}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No establishments available</p>
+          )}
+        </div>
 
         <div className="food-reviews">
           <h2>Food Reviews for Establishments</h2>
-            {reviews.length > 0 ? (
+          {reviews.length > 0 ? (
             <table>
               <thead>
                 <tr>
@@ -191,34 +191,37 @@ export default function ViewTab() {
                 ))}
               </tbody>
             </table>
-        ) : (<p>No food reviews available</p>)}
-
+          ) : (
+            <p>No food reviews available</p>
+          )}
 
           <h2>Food Reviews for Items</h2>
-            {foodReviews.length > 0 ? (
-              <table>
-                <thead>
-                  <tr>
-                    <th>Username</th>
-                    <th>Food Item</th>
-                    <th>Rating</th>
-                    <th>Date</th>
-                    <th>Review Content</th>
+          {foodReviews.length > 0 ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Food Item</th>
+                  <th>Rating</th>
+                  <th>Date</th>
+                  <th>Review Content</th>
+                </tr>
+              </thead>
+              <tbody>
+                {foodReviews.map((review) => (
+                  <tr key={review.ReviewID}>
+                    <td>{review.Username}</td>
+                    <td>{review.FoodItemName}</td>
+                    <td>{review.Rating}</td>
+                    <td>{new Date(review.Date).toLocaleDateString()}</td>
+                    <td>{review.Review_Content}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {foodReviews.map((review) => (
-                    <tr key={review.ReviewID}>
-                      <td>{review.Username}</td>
-                      <td>{review.FoodItemName}</td>
-                      <td>{review.Rating}</td>
-                      <td>{new Date(review.Date).toLocaleDateString()}</td>
-                      <td>{review.Review_Content}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (<p>No food reviews available</p>)}
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No food reviews available</p>
+          )}
         </div>
 
         <div className="food-items">
@@ -266,14 +269,16 @@ export default function ViewTab() {
           <h2>Food Types</h2>
           <div className="same-line">
             <div className="food-type-buttons">
-              {foodTypes.map((type) => (
-                <button
-                  key={type.FoodType}
-                  onClick={() => setSelectedFoodType(type.FoodType)}
-                >
-                  {type.FoodType}
-                </button>
-              ))}
+              <div className="same-line">
+                {foodTypes.map((type) => (
+                  <button
+                    key={type.FoodType}
+                    onClick={() => setSelectedFoodType(type.FoodType)}
+                  >
+                    {type.FoodType}
+                  </button>
+                ))}
+              </div>
             </div>
             {selectedFoodType ? (
               <div className="food-type-container">
@@ -330,8 +335,9 @@ export default function ViewTab() {
                 ))}
               </tbody>
             </table>
-          ) : (<p>No establishment reviews available</p>)}
-
+          ) : (
+            <p>No establishment reviews available</p>
+          )}
         </div>
         <div className="high-rated-establishments">
           <h2>High Rated Establishments (3 and above)</h2>
@@ -354,7 +360,9 @@ export default function ViewTab() {
                 ))}
               </tbody>
             </table>
-          ) : (<p>No establishments available</p>)}
+          ) : (
+            <p>No establishments available</p>
+          )}
         </div>
 
         <div className="monthly-food-reviews">
@@ -382,7 +390,9 @@ export default function ViewTab() {
                 ))}
               </tbody>
             </table>
-          ) : (<p>No food reviews available</p>)}
+          ) : (
+            <p>No food reviews available</p>
+          )}
         </div>
 
         <div className="sorted-food-items">
@@ -396,27 +406,29 @@ export default function ViewTab() {
             </button>
           </div>
           {sortedFoodItems.length > 0 ? (
-          <table>
-            <thead>
-              <tr>
-                <th>Establishment</th>
-                <th>Food Item</th>
-                <th>Price</th>
-                <th>Average Rating</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedFoodItems.map((item) => (
-                <tr key={item.FoodItemID}>
-                  <td>{item.EstablishmentName}</td>
-                  <td>{item.FoodItemName}</td>
-                  <td>{item.Price}</td>
-                  <td>{item.AverageRating}</td>
+            <table>
+              <thead>
+                <tr>
+                  <th>Establishment</th>
+                  <th>Food Item</th>
+                  <th>Price</th>
+                  <th>Average Rating</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          ) : (<p>No food items available</p>)}
+              </thead>
+              <tbody>
+                {sortedFoodItems.map((item) => (
+                  <tr key={item.FoodItemID}>
+                    <td>{item.EstablishmentName}</td>
+                    <td>{item.FoodItemName}</td>
+                    <td>{item.Price}</td>
+                    <td>{item.AverageRating}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No food items available</p>
+          )}
         </div>
       </div>
     </div>

@@ -41,10 +41,11 @@ div.food-items-container {
 }
 
 div.food-items table {
-  width: 80vw;
+  width: 78vw;
+  margin-left: 2vw;
 }
 
-div.food-items .establishment-buttons {
+div.food-items .establishment-buttons .same-line {
   width: 20vw;
   flex-wrap: wrap;
 }
@@ -53,7 +54,7 @@ div.food-types .same-line {
   align-items: flex-start;
 }
 
-div.food-type-buttons {
+div.food-type-buttons .same-line {
   width: 20vw;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -61,7 +62,8 @@ div.food-type-buttons {
 }
 
 div.food-type-container {
-  width: 80vw;
+  width: 78vw;
+  margin-left: 2vw;
 }
 
 h2.food-type-label {
