@@ -140,8 +140,9 @@ export default function ViewTab() {
   return (
     <div className="viewtab-container">
       <div className="floating-container">
-        <div className="food-establishments">
-          <h2>Food Establishments</h2>
+      <div className="food-establishments">
+        <h2>Food Establishments</h2>
+        {establishments.length > 0 ? (
           <table>
             <thead>
               <tr>
@@ -160,56 +161,66 @@ export default function ViewTab() {
               ))}
             </tbody>
           </table>
-        </div>
+        ) : (
+          <p>No establishments available</p>
+        )}
+      </div>
 
         <div className="food-reviews">
           <h2>Food Reviews for Establishments</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Establishment</th>
-                <th>Rating</th>
-                <th>Date</th>
-                <th>Review Content</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reviews.map((review) => (
-                <tr key={review.ReviewID}>
-                  <td>{review.Username}</td>
-                  <td>{review.EstablishmentName}</td>
-                  <td>{review.Rating}</td>
-                  <td>{new Date(review.Date).toLocaleDateString()}</td>
-                  <td>{review.Review_Content}</td>
+            {reviews.length > 0 ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Establishment</th>
+                  <th>Rating</th>
+                  <th>Date</th>
+                  <th>Review Content</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {reviews.map((review) => (
+                  <tr key={review.ReviewID}>
+                    <td>{review.Username}</td>
+                    <td>{review.EstablishmentName}</td>
+                    <td>{review.Rating}</td>
+                    <td>{new Date(review.Date).toLocaleDateString()}</td>
+                    <td>{review.Review_Content}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+        ) : (<p>No food reviews available</p>)}
+
+
           <h2>Food Reviews for Items</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Food Item</th>
-                <th>Rating</th>
-                <th>Date</th>
-                <th>Review Content</th>
-              </tr>
-            </thead>
-            <tbody>
-              {foodReviews.map((review) => (
-                <tr key={review.ReviewID}>
-                  <td>{review.Username}</td>
-                  <td>{review.FoodItemName}</td>
-                  <td>{review.Rating}</td>
-                  <td>{new Date(review.Date).toLocaleDateString()}</td>
-                  <td>{review.Review_Content}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            {foodReviews.length > 0 ? (
+              <table>
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Food Item</th>
+                    <th>Rating</th>
+                    <th>Date</th>
+                    <th>Review Content</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {foodReviews.map((review) => (
+                    <tr key={review.ReviewID}>
+                      <td>{review.Username}</td>
+                      <td>{review.FoodItemName}</td>
+                      <td>{review.Rating}</td>
+                      <td>{new Date(review.Date).toLocaleDateString()}</td>
+                      <td>{review.Review_Content}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (<p>No food reviews available</p>)}
         </div>
+
         <div className="food-items">
           <h2>Food Items Per Establishment</h2>
           <div className="food-items-container">
@@ -296,75 +307,84 @@ export default function ViewTab() {
         </div>
         <div className="monthly-reviews">
           <h2>Monthly Reviews for Establishments</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Establishment</th>
-                <th>Rating</th>
-                <th>Date</th>
-                <th>Review Content</th>
-              </tr>
-            </thead>
-            <tbody>
-              {monthlyReviews.map((review) => (
-                <tr key={review.ReviewID}>
-                  <td>{review.Username}</td>
-                  <td>{review.EstablishmentName}</td>
-                  <td>{review.Rating}</td>
-                  <td>{new Date(review.Date).toLocaleDateString()}</td>
-                  <td>{review.Review_Content}</td>
+          {monthlyReviews.length > 0 ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Establishment</th>
+                  <th>Rating</th>
+                  <th>Date</th>
+                  <th>Review Content</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {monthlyReviews.map((review) => (
+                  <tr key={review.ReviewID}>
+                    <td>{review.Username}</td>
+                    <td>{review.EstablishmentName}</td>
+                    <td>{review.Rating}</td>
+                    <td>{new Date(review.Date).toLocaleDateString()}</td>
+                    <td>{review.Review_Content}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (<p>No establishment reviews available</p>)}
+
         </div>
         <div className="high-rated-establishments">
           <h2>High Rated Establishments (3 and above)</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Average Rating</th>
-                <th>Address</th>
-              </tr>
-            </thead>
-            <tbody>
-              {highRatedEstablishments.map((establishment) => (
-                <tr key={establishment.EstablishmentID}>
-                  <td>{establishment.Name}</td>
-                  <td>{establishment.AverageRating}</td>
-                  <td>{establishment.Address}</td>
+          {highRatedEstablishments.length > 0 ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Average Rating</th>
+                  <th>Address</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {highRatedEstablishments.map((establishment) => (
+                  <tr key={establishment.EstablishmentID}>
+                    <td>{establishment.Name}</td>
+                    <td>{establishment.AverageRating}</td>
+                    <td>{establishment.Address}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (<p>No establishments available</p>)}
         </div>
+
         <div className="monthly-food-reviews">
           <h2>Monthly Food Reviews</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Food Item</th>
-                <th>Rating</th>
-                <th>Date</th>
-                <th>Review Content</th>
-              </tr>
-            </thead>
-            <tbody>
-              {monthlyFoodReviews.map((review) => (
-                <tr key={review.ReviewID}>
-                  <td>{review.Username}</td>
-                  <td>{review.FoodItemName}</td>
-                  <td>{review.Rating}</td>
-                  <td>{new Date(review.Date).toLocaleDateString()}</td>
-                  <td>{review.Review_Content}</td>
+          {monthlyFoodReviews.length > 0 ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Food Item</th>
+                  <th>Rating</th>
+                  <th>Date</th>
+                  <th>Review Content</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {monthlyFoodReviews.map((review) => (
+                  <tr key={review.ReviewID}>
+                    <td>{review.Username}</td>
+                    <td>{review.FoodItemName}</td>
+                    <td>{review.Rating}</td>
+                    <td>{new Date(review.Date).toLocaleDateString()}</td>
+                    <td>{review.Review_Content}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (<p>No food reviews available</p>)}
         </div>
+
         <div className="sorted-food-items">
           <h2>Sorted Food Items by Price</h2>
           <div className="same-line">
@@ -375,6 +395,7 @@ export default function ViewTab() {
               Sort by Price: High to Low
             </button>
           </div>
+          {sortedFoodItems.length > 0 ? (
           <table>
             <thead>
               <tr>
@@ -395,6 +416,7 @@ export default function ViewTab() {
               ))}
             </tbody>
           </table>
+          ) : (<p>No food items available</p>)}
         </div>
       </div>
     </div>
