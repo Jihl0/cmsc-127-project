@@ -115,7 +115,7 @@ export default function ModifyFood() {
     const foodItemId = e.target.value;
     const foodItem = foodItems.find((item) => item.FoodItemID == foodItemId);
     setSelectedFoodItem(foodItem);
-    setName(foodItem?.FoodItemName || '');
+    setName(foodItem?.Name || '');
     setPrice(foodItem?.Price || '');
     setAverageRating(foodItem?.AverageRating || '');
     setFoodType(foodItem?.FoodType || '');
@@ -186,7 +186,7 @@ export default function ModifyFood() {
             </option>
             {foodItems.map((item) => (
               <option key={item.FoodItemID} value={item.FoodItemID}>
-                {item.FoodItemName}
+                {item.Name}
               </option>
             ))}
           </select>
@@ -238,7 +238,7 @@ export default function ModifyFood() {
             </option>
             {foodItems.map((item) => (
               <option key={item.FoodItemID} value={item.FoodItemID}>
-                {item.FoodItemName}
+                {item.Name}
               </option>
             ))}
           </select>
