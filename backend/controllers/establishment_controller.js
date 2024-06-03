@@ -235,4 +235,58 @@ async function searchEstablishmentReviews(req, res) {
     }
 }
 
-export { getAllEstablishments, getEstablishmentReviews, getMonthlyEstablishmentReviews, getHighRatedEstablishments, addEstablishment, updateEstablishment, deleteEstablishment, searchEstablishments, searchEstablishmentReviews };
+// Add a new establishment review
+async function addEstablishmentReview(req, res) {
+    const { userID, establishmentID, rating, date, reviewContent } = req.body;
+    try {
+        const conn = await pool.getConnection();
+        const result = await conn.query(`
+            INSERT INTO REVIEW_ESTAB (UserID, EstablishmentID, Rating, Date, Review_Content)
+            VALUES (?, ?, ?, ?, ?)
+        `, [userID, establishmentID, rating, date, reviewContent]);
+        res.status(201).send('Establishment review added successfully');
+        conn.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+}
+
+// Update an existing establishment review
+async function updateEstablishmentReview(req, res) {
+    const reviewID = req.params.reviewID;
+    const { rating, reviewContent } = req.body;
+    try {
+        const conn = await pool.getConnection();
+        const result = await conn.query(`
+            UPDATE REVIEW_ESTAB
+            SET Rating = ?, Review_Content = ?
+            WHERE ReviewID = ?
+        `, [rating, reviewContent, reviewID]);
+        res.status(200).send('Establishment review updated successfully');
+        conn.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+}
+
+// Delete an existing establishment review
+async function deleteEstablishmentReview(req, res) {
+    const reviewID = req.params.reviewID;
+    try {
+        const conn = await pool.getConnection();
+        const result = await conn.query(`
+            DELETE FROM REVIEW_ESTAB WHERE ReviewID = ?
+        `, [reviewID]);
+        res.status(200).send('Establishment review deleted successfully');
+        conn.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+}
+
+export { getAllEstablishments, getEstablishmentReviews, getMonthlyEstablishmentReviews, getHighRatedEstablishments, addEstablishment, updateEstablishment, deleteEstablishment, searchEstablishments, searchEstablishmentReviews,
+    addEstablishmentReview, updateEstablishmentReview, deleteEstablishmentReview
+ };

@@ -16,7 +16,7 @@ async function getAllFoodItems(req, res) {
     try {
         const conn = await pool.getConnection();
         const rows = await conn.query(`
-            SELECT fi.FoodItemID, fe.Name as EstablishmentName, fi.Name as FoodItemName, fi.Price, fi.AverageRating
+            SELECT fi.FoodItemID, fe.Name as EstablishmentName, fi.Name, fi.Price, fi.AverageRating
             FROM FOOD_ITEM fi
             JOIN FOOD_ESTABLISHMENT fe ON fi.EstablishmentID = fe.EstablishmentID
         `);
@@ -277,7 +277,7 @@ async function searchFoodReviews(req, res) {
     try {
         const conn = await pool.getConnection();
         const rows = await conn.query(`
-        SELECT rf.ReviewID, u.Username, fi.Name AS FoodItemName, rf.Rating, rf.Date, rf.Review_Content
+        SELECT rf.ReviewID, u.Username, fi.Name, rf.Rating, rf.Date, rf.Review_Content
         FROM REVIEW_FOOD rf
         JOIN USER u ON rf.UserID = u.UserID
         JOIN FOOD_ITEM fi ON rf.FoodItemID = fi.FoodItemID
@@ -317,7 +317,7 @@ async function Price (req, res) {
     try {
         const conn = await pool.getConnection();
         const rows = await conn.query(`
-        SELECT fi.FoodItemID, fe.Name as EstablishmentName, fi.Name as FoodItemName, fi.Price, fi.AverageRating
+        SELECT fi.FoodItemID, fe.Name as EstablishmentName, fi.Name, fi.Price, fi.AverageRating
         FROM FOOD_ITEM fi
         JOIN FOOD_ESTABLISHMENT fe ON fi.EstablishmentID = fe.EstablishmentID
             WHERE Price >= ? AND Price <= ?
@@ -330,4 +330,56 @@ async function Price (req, res) {
     }
 };
 
-export { getAllFoodItems, getFoodReviews, getFoodItemsByEstablishment, getFoodTypes, getFoodItemsByType, getMonthlyFoodReviews, getFoodItemsSortedByPrice, addFoodItem, updateFoodItem, deleteFoodItem, searchFoodItems, searchFoodReviews, Price };
+async function addFoodReview(req, res) {
+    const { userID, foodItemID, rating, date, reviewContent } = req.body;
+    try {
+        const conn = await pool.getConnection();
+        const result = await conn.query(`
+            INSERT INTO REVIEW_FOOD (UserID, FoodItemID, Rating, Date, Review_Content)
+            VALUES (?, ?, ?, ?, ?)
+        `, [userID, foodItemID, rating, date, reviewContent]);
+        res.status(201).send('Food review added successfully');
+        conn.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+}
+
+async function updateFoodReview(req, res) {
+    const { reviewID } = req.params;
+    const { rating, reviewContent } = req.body;
+    try {
+        const conn = await pool.getConnection();
+        await conn.query(`
+            UPDATE REVIEW_FOOD
+            SET Rating = ?, Review_Content = ?
+            WHERE ReviewID = ?
+        `, [rating, reviewContent, reviewID]);
+        res.status(200).send('Food review updated successfully');
+        conn.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+}
+
+async function deleteFoodReview(req, res) {
+    const { reviewID } = req.params;
+    try {
+        const conn = await pool.getConnection();
+        await conn.query(`
+            DELETE FROM REVIEW_FOOD
+            WHERE ReviewID = ?
+        `, [reviewID]);
+        res.status(200).send('Food review deleted successfully');
+        conn.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+}
+
+export { getAllFoodItems, getFoodReviews, getFoodItemsByEstablishment, getFoodTypes, getFoodItemsByType, getMonthlyFoodReviews, getFoodItemsSortedByPrice, addFoodItem, updateFoodItem, deleteFoodItem, searchFoodItems, searchFoodReviews, Price,
+    addFoodReview, updateFoodReview, deleteFoodReview
+ };

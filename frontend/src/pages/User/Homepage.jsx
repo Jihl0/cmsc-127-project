@@ -3,6 +3,8 @@ import ViewTab from '../components/viewTab';
 import ModifyEstab from '../components/modifyEstab';
 import SearchTab from '../components/searchTab';
 import ModifyFood from '../components/modifyFood';
+import ModifyEstabReview from '../components/modifyEstabRev.jsx';
+import ModifyFoodReview from '../components/modifyFoodRev.jsx';
 
 import '../../style/User/homepage.css';
 
@@ -21,6 +23,12 @@ export default function Homepage() {
             <Link to="modifyfood">Modify Food</Link>
           </li>
           <li>
+            <Link to="modifyestabrev">Modify Establishment Reviews</Link>
+          </li>
+          <li>
+            <Link to="modifyfoodrev">Modify Food Reviews</Link>
+          </li>
+          <li>
             <Link to="search">Search</Link>
           </li>
         </ul>
@@ -30,6 +38,8 @@ export default function Homepage() {
         <Route path="view" element={<ViewTab />} />
         <Route path="modifyestab" element={<ModifyEstab />} />
         <Route path="modifyfood" element={<ModifyFood />} />
+        <Route path="modifyestabrev" element={<ModifyEstabReview />} />
+        <Route path="modifyfoodrev" element={<ModifyFoodReview />} />
         <Route path="search" element={<SearchTab />} />
       </Routes>
     </div>
